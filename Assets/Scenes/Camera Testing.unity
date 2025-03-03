@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 1313522096}
   m_Layer: 0
   m_Name: pivot
-  m_TagString: Untagged
+  m_TagString: CameraPivot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -577,7 +577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f71a988cc48e6f144ad805798ec5b65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 0
+  mouseSensitivity: 15
   distanceFromPlayer: 5
   aimDistanceFromPlayer: 1
   pivotOffset: 2

@@ -29,9 +29,19 @@ public class CameraController : MonoBehaviour
     private float targetDistance;
     private float currentDistance;
 
+    private InputSystem_Actions inputActions;
+
     private void Awake()
     {
+        inputActions = new InputSystem_Actions();
+        inputActions.Enable();
+        inputActions.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+    }
 
+    private void OnDestroy()
+    {
+        inputActions.Disable();
+        inputActions.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
     }
 
     private void Start()
@@ -52,6 +62,7 @@ public class CameraController : MonoBehaviour
         HandleCameraRotation();
         MovePivot();
         OrbitCamera();
+        lookInput = Vector2.zero;
     }
 
     public void SetLookInput(Vector2 input)
@@ -61,6 +72,7 @@ public class CameraController : MonoBehaviour
 
     private void HandleCameraRotation()
     {
+        Debug.Log($"Look Input: {lookInput}");
         // Get the mouse delta input
         float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
