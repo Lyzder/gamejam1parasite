@@ -52,13 +52,6 @@ public class playerMovement : MonoBehaviour
         moveInput = inputs.Player.Move.ReadValue<Vector2>().normalized;
         Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
 
-        if (moveDirection.sqrMagnitude > 0.01f) // Evita rotar si no hay movimiento
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-        }
-
-
         move = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
         cameraForward = cameraTransform.forward;
@@ -77,5 +70,30 @@ public class playerMovement : MonoBehaviour
         cameraController.SetLookInput(lookInput);
         lookInput = Vector2.zero;
 
+    }
+
+    private void LateUpdate()
+    {
+        RotatePlayerModel();
+    }
+
+    private void RotatePlayerModel()
+    {
+        Vector3 lookDirection;
+        Quaternion targetRotation;
+
+        if (moveInput.sqrMagnitude > 0.01f)
+        {
+            // Get the camera's forward direction, ignoring the y-axis
+            lookDirection = cameraTransform.forward;
+            lookDirection.y = 0f; // Ensure the rotation is only on the horizontal plane
+
+            if (lookDirection != Vector3.zero)
+            {
+                // Smooth rotation towards the camera direction
+                targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
+            }
+        }
     }
 }
