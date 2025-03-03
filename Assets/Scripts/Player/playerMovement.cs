@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Windows;
 
 public class playerMovement : MonoBehaviour
 {
@@ -16,13 +15,20 @@ public class playerMovement : MonoBehaviour
     private Vector3 cameraRight;
     private Vector3 move;
 
+    private Rigidbody rb;
+    public float jumpForce = 3f;
 
     private void Awake()
     {
+        rb = GetComponent<Rigidbody>(); // Obtiene el Rigidbody del personaje
         inputs = new InputSystem_Actions();
         inputs.Player.Enable();
 
         inputs.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+
+        // Detectar el salto
+        inputs.Player.Jump.performed += ctx => Jump();
+
         cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         if (cameraTransform == null)
         {
@@ -34,9 +40,8 @@ public class playerMovement : MonoBehaviour
     {
         inputs.Player.Disable();
         inputs.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
+        inputs.Player.Jump.performed -= ctx => Jump();
     }
-
-
 
     private void Update()
     {
@@ -52,13 +57,6 @@ public class playerMovement : MonoBehaviour
         moveInput = inputs.Player.Move.ReadValue<Vector2>().normalized;
         Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
 
-        if (moveDirection.sqrMagnitude > 0.01f) // Evita rotar si no hay movimiento
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-        }
-
-
         move = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
         cameraForward = cameraTransform.forward;
@@ -68,14 +66,49 @@ public class playerMovement : MonoBehaviour
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        // Calculate the movement direction relative to the camera
+        // Movimiento relativo a la cámara
         moveDirection = (cameraForward * move.z + cameraRight * move.x).normalized;
 
         transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
 
-
         cameraController.SetLookInput(lookInput);
         lookInput = Vector2.zero;
+    }
 
+    private void LateUpdate()
+    {
+        RotatePlayerModel();
+    }
+
+    private void RotatePlayerModel()
+    {
+        Vector3 lookDirection;
+        Quaternion targetRotation;
+
+        if (moveInput.sqrMagnitude > 0.01f)
+        {
+            lookDirection = cameraTransform.forward;
+            lookDirection.y = 0f;
+
+            if (lookDirection != Vector3.zero)
+            {
+                targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
+            }
+        }
+    }
+
+    private void Jump()
+    {
+        if (IsGrounded()) 
+        {
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); 
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
 }
