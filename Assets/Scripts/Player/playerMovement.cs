@@ -111,4 +111,29 @@ public class playerMovement : MonoBehaviour
     {
         return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
+
+    private void LateUpdate()
+    {
+        RotatePlayerModel();
+    }
+
+    private void RotatePlayerModel()
+    {
+        Vector3 lookDirection;
+        Quaternion targetRotation;
+
+        if (moveInput.sqrMagnitude > 0.01f)
+        {
+            // Get the camera's forward direction, ignoring the y-axis
+            lookDirection = cameraTransform.forward;
+            lookDirection.y = 0f; // Ensure the rotation is only on the horizontal plane
+
+            if (lookDirection != Vector3.zero)
+            {
+                // Smooth rotation towards the camera direction
+                targetRotation = Quaternion.LookRotation(lookDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
+            }
+        }
+    }
 }
