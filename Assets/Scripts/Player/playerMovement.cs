@@ -11,6 +11,10 @@ public class playerMovement : MonoBehaviour
     public float speed = 2f;
     private Vector2 lookInput;
     private CameraController cameraController;
+    private Transform cameraTransform;
+    private Vector3 cameraForward;
+    private Vector3 cameraRight;
+    private Vector3 move;
 
 
     private void Awake()
@@ -20,6 +24,10 @@ public class playerMovement : MonoBehaviour
 
         inputs.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
         cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
+        if (cameraTransform == null)
+        {
+            cameraTransform = Camera.main.transform;
+        }
     }
 
     private void OnDestroy()
@@ -49,6 +57,19 @@ public class playerMovement : MonoBehaviour
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+
+
+        move = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+
+        cameraForward = cameraTransform.forward;
+        cameraRight = cameraTransform.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        // Calculate the movement direction relative to the camera
+        moveDirection = (cameraForward * move.z + cameraRight * move.x).normalized;
 
         transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
 
