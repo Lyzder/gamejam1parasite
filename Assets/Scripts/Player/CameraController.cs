@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
 {
     [Header("Settings")]
     public float mouseSensitivity;
-    public float distanceFromPlayer = 5f; // Distance between camera and player
+    [SerializeField] float distanceDefault = 5f;
     public float aimDistanceFromPlayer = 1f;
     public float pivotOffset = 2f;
     public float shoulderOffset = -0.5f;
@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour
     public float transitionSpeed = 10f; // Smoothing factor
 
     private Transform playerPivot; // The pivot inside the player object
+    private float distanceFromPlayer = 5f; // Distance between camera and player
     private Vector2 lookInput;
     private float xRotation = 0f;
     private float yRotation = 0f;
@@ -29,19 +30,9 @@ public class CameraController : MonoBehaviour
     private float targetDistance;
     private float currentDistance;
 
-    private InputSystem_Actions inputActions;
-
     private void Awake()
     {
-        inputActions = new InputSystem_Actions();
-        inputActions.Enable();
-        inputActions.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
-    }
-
-    private void OnDestroy()
-    {
-        inputActions.Disable();
-        inputActions.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
+        
     }
 
     private void Start()
@@ -62,7 +53,6 @@ public class CameraController : MonoBehaviour
         HandleCameraRotation();
         MovePivot();
         OrbitCamera();
-        lookInput = Vector2.zero;
     }
 
     public void SetLookInput(Vector2 input)
@@ -102,6 +92,15 @@ public class CameraController : MonoBehaviour
     public void SetAimingState(bool aiming)
     {
         isAiming = aiming;
+    }
+
+    public void SetCameraDistance(float distance)
+    {
+        distanceFromPlayer = distance;
+    }
+    public void ResetDistance()
+    {
+        distanceFromPlayer = distanceDefault;
     }
 
     private void MovePivot()
