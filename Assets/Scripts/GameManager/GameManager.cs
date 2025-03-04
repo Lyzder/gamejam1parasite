@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
             CurrentState = GameState.Playing;
             Debug.Log("Game Started!");
             // Lógica adicional, como reiniciar variables o cargar la escena
+           
         }
     }
 
@@ -62,5 +63,10 @@ public class GameManager : MonoBehaviour
             // Aquí puedes agregar lógica para mostrar una pantalla de fin de juego
         }
     }
+   
+   
+
+  
+
 }
 
