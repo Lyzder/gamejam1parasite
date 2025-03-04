@@ -18,6 +18,10 @@ public class playerMovement : MonoBehaviour
     private Rigidbody rb;
     public float jumpForce = 3f;
 
+
+    [SerializeField] Transform pivotePoseer;
+    [SerializeField] float radioPoseer;
+    [SerializeField] LayerMask capaDeteccion;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>(); // Obtiene el Rigidbody del personaje
@@ -28,6 +32,8 @@ public class playerMovement : MonoBehaviour
 
         // Detectar el salto
         inputs.Player.Jump.performed += ctx => Jump();
+
+        inputs.Player.Interact.performed += ctx => Poseer();
 
         cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         if (cameraTransform == null)
@@ -41,6 +47,7 @@ public class playerMovement : MonoBehaviour
         inputs.Player.Disable();
         inputs.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
         inputs.Player.Jump.performed -= ctx => Jump();
+        inputs.Player.Interact.performed -= ctx => Poseer();
     }
 
     private void Update()
@@ -112,6 +119,19 @@ public class playerMovement : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
 
-
+    private void Poseer()
+    {
+        Collider[] objetos = Physics.OverlapSphere(pivotePoseer.position, radioPoseer, capaDeteccion);
+        if(objetos.Length > 0)
+        {
+            HeavyObjectMovement_PlayerDetector detector = objetos[0].GetComponent<HeavyObjectMovement_PlayerDetector>();
+            detector.Poseer(gameObject);
+        }
+    }
+    private void OnDrawGizmos()//Para dibujar guizmos solo vistas en editor 
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(pivotePoseer.position, radioPoseer);
+    }
 
 }

@@ -36,46 +36,32 @@ public class LightObjectMovement_PlayerDetector : MonoBehaviour
 
     private void Update()
     {
+        if (targetParent != null)
+        {
+            targetParent.rotation = Quaternion.identity; // Mantiene el container sin rotación
+        }
+
         if (playerInZone && Input.GetKeyDown(KeyCode.E) && targetParent != null)
         {
-            if (!isAttached)
+            if (!isAttached && targetParent.childCount == 0) // Solo si el contenedor no tiene hijos
             {
-                // Primera vez presionando E: El jugador se vuelve hijo y se desactiva
                 Debug.Log("Jugador ahora es hijo de " + targetParent.name + " y se ha desactivado.");
                 player.transform.SetParent(targetParent);
                 player.SetActive(false);
-                movementScript.enabled = true;
-
-                // Reactivar física al tomar el objeto
-                if (rb != null)
-                {
-                    rb.isKinematic = false;
-                }
-
                 isAttached = true;
+                CheckChildren(); // Verifica si el container tiene hijos y activa/desactiva el movimiento
             }
-            else if (isAttached && movementScript.isGrounded) // Solo se suelta si está en el suelo
+            else if (isAttached && movementScript.isGrounded && Input.GetKeyDown(KeyCode.E))
             {
-                // Segunda vez presionando E: El jugador se reactiva y deja de ser hijo
-                Debug.Log("Jugador activado, dejó de ser hijo, y LightObjectMovement del padre se desactiva.");
+                Debug.Log("Se presionó 'E' y se cumplen las condiciones para soltar al jugador.");
                 player.SetActive(true);
                 player.transform.SetParent(null);
                 isAttached = false;
-
-                // Desactivar movimiento y frenar el objeto
-                if (movementScript != null)
-                {
-                    movementScript.enabled = false;
-                }
-
-                if (rb != null)
-                {
-                    rb.velocity = Vector3.zero; // Detiene el movimiento
-                    rb.angularVelocity = Vector3.zero; // Detiene la rotación
-                    rb.isKinematic = true; // Desactiva físicas temporalmente
-                }
-
-                Debug.Log("LightObjectMovement desactivado en el padre.");
+                CheckChildren(); // Verifica si el container tiene hijos y activa/desactiva el movimiento
+            }
+            else if (targetParent.childCount > 0)
+            {
+                Debug.Log("El container ya tiene un hijo. No se puede añadir otro.");
             }
         }
     }
@@ -97,6 +83,30 @@ public class LightObjectMovement_PlayerDetector : MonoBehaviour
             Debug.Log("Jugador salió del área.");
             player = null;
             playerInZone = false;
+        }
+    }
+
+    private void CheckChildren()
+    {
+        if (movementScript != null)
+        {
+            if (targetParent.childCount > 0)
+            {
+                movementScript.enabled = true;
+                Debug.Log("LightObjectMovement activado.");
+                if (rb != null) rb.isKinematic = false;
+            }
+            else
+            {
+                movementScript.enabled = false;
+                Debug.Log("LightObjectMovement desactivado porque el container no tiene hijos.");
+                if (rb != null)
+                {
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.isKinematic = true;
+                }
+            }
         }
     }
 }

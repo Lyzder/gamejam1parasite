@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CameraPivot
   - Ground
+  - HeavyObject
   layers:
   - Default
   - TransparentFX
@@ -13,8 +14,8 @@ TagManager:
   - UICamera
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Poseeible
   - 
   - 
   - 
