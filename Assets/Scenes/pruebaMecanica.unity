@@ -172,12 +172,13 @@ MonoBehaviour:
   mouseSensitivity: 10
   distanceDefault: 5
   aimDistanceFromPlayer: 1
-  pivotOffset: 2
+  alturaOffset: 1
   shoulderOffset: -0.5
   verticalClamp: {x: -30, y: 70}
   aimDistance: 2
   aimSideOffset: 0.5
   transitionSpeed: 10
+  distanceFromPlayer: 3
 --- !u!114 &88825533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +290,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 206119636353145352, guid: 80f719a1411345f4687073a5b72d371e,
+        type: 3}
+      propertyPath: alturaOffset
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4733584504659255165, guid: 80f719a1411345f4687073a5b72d371e,
         type: 3}
       propertyPath: m_Name
@@ -575,12 +581,13 @@ MonoBehaviour:
   mouseSensitivity: 10
   distanceDefault: 5
   aimDistanceFromPlayer: 1
-  pivotOffset: 2
+  alturaOffset: 1
   shoulderOffset: -0.5
   verticalClamp: {x: -30, y: 70}
   aimDistance: 2
   aimSideOffset: 0.5
   transitionSpeed: 10
+  distanceFromPlayer: 3
 --- !u!114 &609992835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,12 +877,13 @@ MonoBehaviour:
   mouseSensitivity: 10
   distanceDefault: 5
   aimDistanceFromPlayer: 1
-  pivotOffset: 2
+  alturaOffset: 0
   shoulderOffset: -0.5
   verticalClamp: {x: -30, y: 70}
   aimDistance: 2
   aimSideOffset: 0.5
   transitionSpeed: 10
+  distanceFromPlayer: 3
 --- !u!114 &876668176
 MonoBehaviour:
   m_ObjectHideFlags: 0

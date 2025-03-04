@@ -8,6 +8,18 @@ public class Object_PlayerDetector : MonoBehaviour
     private HeavyObjectMovement movementScriptPesado; // Referencia a HeavyObjectMovement en el padre
     private LightObjectMovement movementScriptLiviano; // Referencia a HeavyObjectMovement en el padre
     [SerializeField] int tipo; // 0=liviano , 1=pesado, 2=arma
+    private InputSystem_Actions inputs;
+
+    private void Awake()
+    {
+        inputs = new InputSystem_Actions();
+        inputs.Player.Interact.performed += ctx => DesPoseer();
+    }
+
+    private void OnDisable()
+    {
+        inputs.Player.Interact.performed -= ctx => DesPoseer();
+    }
 
     private void Start()
     {
@@ -56,6 +68,7 @@ public class Object_PlayerDetector : MonoBehaviour
         player.SetActive(false);
         isAttached = true;
         this.player = player;
+        inputs.Enable();
         switch (tipo)
         {
             case 1:
@@ -70,13 +83,14 @@ public class Object_PlayerDetector : MonoBehaviour
         }
     }
 
-    public void DesPoseer()
+    private void DesPoseer()
     {
         if (isAttached)
         {
             player.SetActive(true);
             player.transform.SetParent(null);
             isAttached = false;
+            inputs.Disable();
             switch (tipo)
             {
                 case 1:
