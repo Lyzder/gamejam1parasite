@@ -1,12 +1,13 @@
-﻿using TMPro.Examples;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem; // Necesario para InputSystem_Actions
+using UnityEngine.InputSystem;
 
-public class LightObjectMovement : MonoBehaviour
+public class WeaponObjectMovement : MonoBehaviour
 {
     private Rigidbody rb;
-    private Vector2 moveInput;
     private InputSystem_Actions inputs;
+    private Vector2 moveInput;
     private GameObject camara;
     private Transform cameraTransform;
     private CameraController cameraController;
@@ -15,12 +16,12 @@ public class LightObjectMovement : MonoBehaviour
     private Vector3 cameraRight;
     private Vector3 move;
 
-    [Header("Movimiento y Salto")]
-    public float speed = 4f;
+    public bool isGrounded;
+
+    [Header("Configuración de Movimiento")]
+    public float speed = 2f;
     public float jumpForce = 10f; // Fuerza del salto
     public float airControl = 0.5f; // Control en el aire
-
-    public bool isGrounded;
 
     private void Awake()
     {
@@ -29,7 +30,7 @@ public class LightObjectMovement : MonoBehaviour
         cameraController = camara.GetComponent<CameraController>();
         camara.SetActive(false);
 
-        // Obtener el Rigidbody y asegurar que la gravedad esté activada
+        // Obtener el Rigidbody
         rb = GetComponent<Rigidbody>();
         rb.useGravity = true;
 
@@ -50,6 +51,7 @@ public class LightObjectMovement : MonoBehaviour
         inputs.Player.Jump.performed -= OnJump;
         inputs.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
     }
+
     private void OnEnable()
     {
         inputs.Player.Enable();
@@ -62,6 +64,18 @@ public class LightObjectMovement : MonoBehaviour
         camara?.SetActive(false);
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
     private void FixedUpdate()
     {
         // Mejor detección del suelo con un Raycast
@@ -71,16 +85,6 @@ public class LightObjectMovement : MonoBehaviour
 
         cameraController.SetLookInput(lookInput);
         lookInput = Vector2.zero;
-    }
-
-    private void OnJump(InputAction.CallbackContext ctx)
-    {
-        if (isGrounded)
-        {
-            // Reiniciar la velocidad vertical para un salto consistente
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
     }
 
     private void Move()
@@ -104,21 +108,13 @@ public class LightObjectMovement : MonoBehaviour
         rb.AddForce(moveDirection * speed);
     }
 
-    private void OnDrawGizmos()
+    private void OnJump(InputAction.CallbackContext ctx)
     {
-        // Color del Gizmo (verde si está en el suelo, rojo si no)
-        Gizmos.color = isGrounded ? Color.green : Color.red;
-
-        // Dirección y longitud del Raycast
-        Vector3 origin = transform.position;
-        Vector3 direction = Vector3.down * 0.5f;
-
-        // Dibujar el Raycast como una línea
-        Gizmos.DrawLine(origin, origin + direction);
-
-        // Dibujar un punto al final del Raycast
-        Gizmos.DrawSphere(origin + direction, 0.02f);
+        if (isGrounded)
+        {
+            // Reiniciar la velocidad vertical para un salto consistente
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
-
-
 }

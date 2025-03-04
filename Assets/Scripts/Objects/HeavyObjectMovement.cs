@@ -44,11 +44,13 @@ public class HeavyObjectMovement : MonoBehaviour
 
     private void OnEnable()
     {
+        inputs.Player.Enable();
         camara.SetActive (true);
     }
 
     private void OnDisable()
     {
+        inputs.Player.Disable();
         camara?.SetActive (false);
     }
 

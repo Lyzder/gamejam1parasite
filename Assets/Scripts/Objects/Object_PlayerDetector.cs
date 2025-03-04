@@ -6,7 +6,8 @@ public class Object_PlayerDetector : MonoBehaviour
     private GameObject player;      // Referencia al jugador
     private bool isAttached = false; // Indica si el jugador está unido al objeto
     private HeavyObjectMovement movementScriptPesado; // Referencia a HeavyObjectMovement en el padre
-    private LightObjectMovement movementScriptLiviano; // Referencia a HeavyObjectMovement en el padre
+    private LightObjectMovement movementScriptLiviano; // Referencia a LightObjectMovement en el padre
+    private WeaponObjectMovement movementScriptArma; // Referencia a WeaponObjectMovement en el padre
     [SerializeField] int tipo; // 0=liviano , 1=pesado, 2=arma
     private InputSystem_Actions inputs;
 
@@ -29,12 +30,13 @@ public class Object_PlayerDetector : MonoBehaviour
                 movementScriptPesado = GetComponent<HeavyObjectMovement>();
                 break;
             case 2:
-                // TODO
+                movementScriptArma = GetComponent<WeaponObjectMovement>();
                 break;
             default:
                 movementScriptLiviano = GetComponent<LightObjectMovement>();
                 break;
         }
+        targetParent = transform.GetChild(1);
     }
 
     private void Update()
@@ -75,7 +77,7 @@ public class Object_PlayerDetector : MonoBehaviour
                 movementScriptPesado.enabled = true;
                 break;
             case 2:
-                //TODO
+                movementScriptArma.enabled = true;
                 break;
             default:
                 movementScriptLiviano.enabled = true;
@@ -97,7 +99,7 @@ public class Object_PlayerDetector : MonoBehaviour
                     movementScriptPesado.enabled = false;
                     break;
                 case 2:
-                    //TODO
+                    movementScriptArma.enabled = false;
                     break;
                 default:
                     movementScriptLiviano.enabled = false;
