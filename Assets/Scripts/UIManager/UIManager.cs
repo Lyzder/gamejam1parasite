@@ -67,10 +67,12 @@ public class UIManager : MonoBehaviour
     void PauseTime()
     {
         activa = false;
+        GameManager.Instance.PauseGame();
     }
 
     void ResumeTime()
     {
         activa = true;
+        GameManager.Instance.ResumeGame();
     }
 }
