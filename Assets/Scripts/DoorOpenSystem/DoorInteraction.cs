@@ -1,12 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DoorInteraction : MonoBehaviour
 {
     public float openAngle = 90f;
     public float openSpeed = 2f;
-    public bool isOpen = false;
+    private bool isOpen = false;
 
     private Quaternion _closedRotation;
     private Quaternion _openRotation;
@@ -14,30 +13,37 @@ public class DoorInteraction : MonoBehaviour
 
     private void Start()
     {
-        _closedRotation = transform.rotation;
-        _openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0));
+        _closedRotation = transform.rotation; // Guarda la rotación cerrada
+        _openRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, openAngle, 0)); // Define la abierta
     }
 
-    private void Update()
+    public void AbrirPuerta()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!isOpen) // Solo abre si está cerrada
         {
             if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
-            _currentCoroutine = StartCoroutine(ToggleDoor());
+            _currentCoroutine = StartCoroutine(MoverPuerta(_openRotation));
+            isOpen = true;
         }
     }
 
-    private IEnumerator ToggleDoor()
+    public void CerrarPuerta()
     {
-        Quaternion targetRotation = isOpen ? _closedRotation : _openRotation;
-        isOpen = !isOpen;
+        if (isOpen) // Solo cierra si está abierta
+        {
+            if (_currentCoroutine != null) StopCoroutine(_currentCoroutine);
+            _currentCoroutine = StartCoroutine(MoverPuerta(_closedRotation));
+            isOpen = false;
+        }
+    }
 
-        while (Quaternion.Angle(transform.rotation, targetRotation)> 0.01f)
+    private IEnumerator MoverPuerta(Quaternion targetRotation)
+    {
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.01f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * openSpeed);
             yield return null;
         }
-
         transform.rotation = targetRotation;
     }
 }
