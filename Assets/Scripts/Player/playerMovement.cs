@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -66,7 +66,7 @@ public class playerMovement : MonoBehaviour
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        // Movimiento relativo a la cámara
+        // Movimiento relativo a la cï¿½mara
         moveDirection = (cameraForward * move.z + cameraRight * move.x).normalized;
 
         transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
@@ -100,9 +100,9 @@ public class playerMovement : MonoBehaviour
 
     private void Jump()
     {
-        if (IsGrounded()) 
+        if (IsGrounded())
         {
-            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); 
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
@@ -112,28 +112,6 @@ public class playerMovement : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, 1.1f);
     }
 
-    private void LateUpdate()
-    {
-        RotatePlayerModel();
-    }
 
-    private void RotatePlayerModel()
-    {
-        Vector3 lookDirection;
-        Quaternion targetRotation;
 
-        if (moveInput.sqrMagnitude > 0.01f)
-        {
-            // Get the camera's forward direction, ignoring the y-axis
-            lookDirection = cameraTransform.forward;
-            lookDirection.y = 0f; // Ensure the rotation is only on the horizontal plane
-
-            if (lookDirection != Vector3.zero)
-            {
-                // Smooth rotation towards the camera direction
-                targetRotation = Quaternion.LookRotation(lookDirection);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 20f);
-            }
-        }
-    }
 }
