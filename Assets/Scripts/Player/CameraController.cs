@@ -62,7 +62,6 @@ public class CameraController : MonoBehaviour
 
     private void HandleCameraRotation()
     {
-        Debug.Log($"Look Input: {lookInput}");
         // Get the mouse delta input
         float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;
