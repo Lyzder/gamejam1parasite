@@ -124,7 +124,7 @@ public class playerMovement : MonoBehaviour
         Collider[] objetos = Physics.OverlapSphere(pivotePoseer.position, radioPoseer, capaDeteccion);
         if(objetos.Length > 0)
         {
-            HeavyObjectMovement_PlayerDetector detector = objetos[0].GetComponent<HeavyObjectMovement_PlayerDetector>();
+            Object_PlayerDetector detector = objetos[0].GetComponent<Object_PlayerDetector>();
             detector.Poseer(gameObject);
         }
     }

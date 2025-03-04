@@ -7,6 +7,7 @@ TagManager:
   - CameraPivot
   - Ground
   - HeavyObject
+  - ObjectCamera
   layers:
   - Default
   - TransparentFX

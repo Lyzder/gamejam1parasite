@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     public float transitionSpeed = 10f; // Smoothing factor
 
     private Transform playerPivot; // The pivot inside the player object
-    private float distanceFromPlayer = 5f; // Distance between camera and player
+    private float distanceFromPlayer = 3f; // Distance between camera and player
     private Vector2 lookInput;
     private float xRotation = 0f;
     private float yRotation = 0f;
@@ -62,7 +62,6 @@ public class CameraController : MonoBehaviour
 
     private void HandleCameraRotation()
     {
-        Debug.Log($"Look Input: {lookInput}");
         // Get the mouse delta input
         float mouseX = lookInput.x * mouseSensitivity * Time.deltaTime;
         float mouseY = lookInput.y * mouseSensitivity * Time.deltaTime;

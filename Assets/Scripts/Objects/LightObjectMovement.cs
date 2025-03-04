@@ -1,3 +1,4 @@
+ï»¿using TMPro.Examples;
 using UnityEngine;
 using UnityEngine.InputSystem; // Necesario para InputSystem_Actions
 
@@ -6,6 +7,13 @@ public class LightObjectMovement : MonoBehaviour
     private Rigidbody rb;
     private Vector2 moveInput;
     private InputSystem_Actions inputs;
+    private GameObject camara;
+    private Transform cameraTransform;
+    private CameraController cameraController;
+    private Vector2 lookInput;
+    private Vector3 cameraForward;
+    private Vector3 cameraRight;
+    private Vector3 move;
 
     [Header("Movimiento y Salto")]
     public float speed = 4f;
@@ -16,7 +24,12 @@ public class LightObjectMovement : MonoBehaviour
 
     private void Awake()
     {
-        // Obtener el Rigidbody y asegurar que la gravedad esté activada
+        camara = transform.GetChild(2).GetChild(0).gameObject;
+        cameraTransform = camara.transform;
+        cameraController = camara.GetComponent<CameraController>();
+        camara.SetActive(false);
+
+        // Obtener el Rigidbody y asegurar que la gravedad estÃ© activada
         rb = GetComponent<Rigidbody>();
         rb.useGravity = true;
 
@@ -26,6 +39,8 @@ public class LightObjectMovement : MonoBehaviour
 
         // Asignar eventos de entrada correctamente
         inputs.Player.Jump.performed += OnJump;
+
+        inputs.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
     }
 
     private void OnDestroy()
@@ -33,19 +48,27 @@ public class LightObjectMovement : MonoBehaviour
         // Deshabilitar entradas y desuscribir eventos correctamente
         inputs.Player.Disable();
         inputs.Player.Jump.performed -= OnJump;
+        inputs.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
+    }
+    private void OnEnable()
+    {
+        camara.SetActive(true);
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        // Leer la entrada de movimiento
-        moveInput = inputs.Player.Move.ReadValue<Vector2>();
+        camara?.SetActive(false);
+    }
 
-        // Aplicar control en el aire
-        float controlFactor = isGrounded ? 1f : airControl;
-        Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y) * (speed * controlFactor);
+    private void FixedUpdate()
+    {
+        // Mejor detecciÃ³n del suelo con un Raycast
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.5f);
 
-        // Aplicar el movimiento manteniendo la velocidad vertical
-        rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+        Move();
+
+        cameraController.SetLookInput(lookInput);
+        lookInput = Vector2.zero;
     }
 
     private void OnJump(InputAction.CallbackContext ctx)
@@ -58,22 +81,37 @@ public class LightObjectMovement : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void Move()
     {
-        // Mejor detección del suelo con un Raycast
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.5f);
+        moveInput = inputs.Player.Move.ReadValue<Vector2>().normalized;
+        Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+
+        move = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
+
+        cameraForward = cameraTransform.forward;
+        cameraRight = cameraTransform.right;
+        cameraForward.y = 0f;
+        cameraRight.y = 0f;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+
+        // Movimiento relativo a la cï¿½mara
+        moveDirection = (cameraForward * move.z + cameraRight * move.x);
+
+        //transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
+        rb.AddForce(moveDirection * speed);
     }
 
     private void OnDrawGizmos()
     {
-        // Color del Gizmo (verde si está en el suelo, rojo si no)
+        // Color del Gizmo (verde si estÃ¡ en el suelo, rojo si no)
         Gizmos.color = isGrounded ? Color.green : Color.red;
 
-        // Dirección y longitud del Raycast
+        // DirecciÃ³n y longitud del Raycast
         Vector3 origin = transform.position;
-        Vector3 direction = Vector3.down * 0.1f;
+        Vector3 direction = Vector3.down * 0.5f;
 
-        // Dibujar el Raycast como una línea
+        // Dibujar el Raycast como una lÃ­nea
         Gizmos.DrawLine(origin, origin + direction);
 
         // Dibujar un punto al final del Raycast
