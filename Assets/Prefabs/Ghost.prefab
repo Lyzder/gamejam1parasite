@@ -153,12 +153,13 @@ MonoBehaviour:
   mouseSensitivity: 10
   distanceDefault: 5
   aimDistanceFromPlayer: 1
-  pivotOffset: 2
+  alturaOffset: 0
   shoulderOffset: -0.5
   verticalClamp: {x: -30, y: 70}
   aimDistance: 2
   aimSideOffset: 0.5
   transitionSpeed: 10
+  distanceFromPlayer: 3
 --- !u!1 &8532367945184956890
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,11 +350,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 4733584504659255165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10dbeeab98fb0a4459b85daf4f481437, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c03aa649a4233f46a96557435076cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
   jumpForce: 3
+  pivotePoseer: {fileID: 0}
+  radioPoseer: 0
+  capaDeteccion:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!54 &1506768070121457134
 Rigidbody:
   m_ObjectHideFlags: 0
