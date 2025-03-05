@@ -179,6 +179,7 @@ public class WeaponObjectMovement : MonoBehaviour
         {
             Instantiate(bullet, bulletSpawn.position, Quaternion.LookRotation(cameraTransform.forward));
             timer = 0;
+            AudioManager.Instance.PlaySFX(shootSfx);
         }
     }
 }
