@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Object_PlayerDetector : MonoBehaviour
@@ -66,6 +67,9 @@ public class Object_PlayerDetector : MonoBehaviour
 
     public void Poseer(GameObject player)
     {
+        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(true);
+
         player.transform.SetParent(targetParent);
         player.SetActive(false);
         isAttached = true;
@@ -89,6 +93,9 @@ public class Object_PlayerDetector : MonoBehaviour
     {
         if (isAttached)
         {
+            transform.GetChild(0).gameObject.SetActive(true);
+            transform.GetChild(1).gameObject.SetActive(false);
+
             player.SetActive(true);
             player.transform.SetParent(null);
             isAttached = false;

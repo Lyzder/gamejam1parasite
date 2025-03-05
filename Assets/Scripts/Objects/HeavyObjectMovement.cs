@@ -19,7 +19,7 @@ public class HeavyObjectMovement : MonoBehaviour
 
     private void Awake()
     {
-        camara = transform.GetChild(2).GetChild(0).gameObject;
+        camara = transform.GetChild(3).GetChild(0).gameObject;
         cameraTransform = camara.transform;
         cameraController = camara.GetComponent<CameraController>();
         camara.SetActive(false);
