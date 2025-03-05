@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        CurrentState = GameState.GameOver;
+        CurrentState = GameState.GameOver; // Asegurar que el estado cambia
     }
 
     public void ResetGame()
