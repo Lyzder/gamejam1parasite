@@ -5,15 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - CameraPivot
+  - Ground
+  - HeavyObject
+  - ObjectCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - UICamera
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Poseeible
   - 
   - 
   - 
