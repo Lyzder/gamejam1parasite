@@ -10,6 +10,7 @@ TagManager:
   - ObjectCamera
   - Door
   - Star
+  - Destruible
   layers:
   - Default
   - TransparentFX
