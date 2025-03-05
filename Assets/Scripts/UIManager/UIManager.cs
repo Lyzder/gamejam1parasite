@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,8 +13,9 @@ public class UIManager : MonoBehaviour
     private bool activa;
 
     [SerializeField]
-    GameObject menuPantalla, tutoPantalla, opcionesPantalla,
-               pausaPantalla, derrotaPantalla, victoriaPantalla, pressEMensaja;
+    private GameObject menuPantalla, tutoPantalla, opcionesPantalla, pausaPantalla, derrotaPantalla, victoriaPantalla, pressEMensaja;
+    [SerializeField] Slider musicSlider, sfxSlider;
+    [SerializeField] Toggle muteCheck;
 
     private void Start()
     {
@@ -21,7 +23,9 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f; // Mantener Time.timeScale en 1 para RawImages
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+        SaveOptions();
         ActualizarUI();
+        AudioManager.Instance.PlaySceneBgm();
     }
 
     private void Update()
@@ -164,5 +168,33 @@ public class UIManager : MonoBehaviour
         Cursor.lockState = enPantalla ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = enPantalla;
         activa = !enPantalla;
+    }
+
+    public void CambiarVolumenMusica()
+    {
+        AudioManager.Instance.SetMusicVolume(musicSlider.value);
+    }
+
+    public void CambiarVolumenSfx()
+    {
+        AudioManager.Instance.SetSfxVolume(sfxSlider.value);
+    }
+
+    public void SaveOptions()
+    {
+        AudioManager.Instance.SaveSoundPreferences(musicSlider.value, sfxSlider.value, muteCheck.isOn);
+    }
+
+    public void MuteAudio()
+    {
+        AudioManager.Instance.ToggleMute(musicSlider.value, sfxSlider.value);
+    }
+
+    public void LoadOptions()
+    {
+        musicSlider.value = PlayerPrefs.GetFloat(AudioManager.Instance.musicSavedValue); // Actualiza el slider de m�sica
+        sfxSlider.value = PlayerPrefs.GetFloat(AudioManager.Instance.sfxSavedValue); // Actualiza el slider de efectos de sonido
+        muteCheck.isOn = PlayerPrefs.GetInt(AudioManager.Instance.isMuted) == 1; // Actualiza el toggle de silencio
+        AudioManager.Instance.LoadSoundPreferences(); // Carga los valores guardados en AudioManager
     }
 }
