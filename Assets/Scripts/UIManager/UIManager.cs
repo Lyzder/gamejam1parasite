@@ -9,8 +9,8 @@ public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI tiempoTxt;
 
-    float tiempo;
-    bool activa;
+    [SerializeField] private float tiempo = 299f; // Ahora visible en el Inspector
+    private bool activa;
 
     [SerializeField]
     private GameObject menuPantalla, tutoPantalla, opcionesPantalla, pausaPantalla, derrotaPantalla, victoriaPantalla, pressEMensaja;
@@ -19,9 +19,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        tiempo = 299f;
         activa = false; // El contador no inicia hasta que se presione Play
-        Time.timeScale = 0f; // Asegurar que el tiempo está pausado al inicio
+        Time.timeScale = 1f; // Mantener Time.timeScale en 1 para RawImages
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SaveOptions();
@@ -36,16 +35,15 @@ public class UIManager : MonoBehaviour
             Contador();
         }
 
-        // Detectar la tecla P para pausar o reanudar
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (GameManager.Instance.CurrentState == GameManager.GameState.Paused)
             {
-                OnResumeGame(); // Si está pausado, reanudar
+                OnResumeGame();
             }
             else if (GameManager.Instance.CurrentState == GameManager.GameState.Playing)
             {
-                OnPauseGame(); // Si está en juego, pausar
+                OnPauseGame();
             }
         }
     }
@@ -59,15 +57,15 @@ public class UIManager : MonoBehaviour
 
     private void Contador()
     {
-        if (tiempo > 0)
+        if (activa && tiempo > 0)
         {
-            tiempo -= Time.deltaTime;
+            tiempo -= Time.unscaledDeltaTime; // Sigue corriendo aunque Time.timeScale = 0
             UpdateTimeUI(tiempo);
         }
-        else
+        else if (tiempo <= 0)
         {
             activa = false;
-            OnEndGame(); // Si el tiempo llega a 0, el juego termina
+            OnEndGame();
         }
     }
 
@@ -76,11 +74,10 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.CurrentState != GameManager.GameState.Idle) return;
 
         GameManager.Instance.StartGame();
-        Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        activa = true; // Iniciar el contador al comenzar el juego
-        menuPantalla.SetActive(false); // Ocultar el menú principal
+        activa = true;
+        menuPantalla.SetActive(false);
         ActualizarUI();
     }
 
@@ -89,10 +86,9 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.CurrentState != GameManager.GameState.Playing) return;
 
         GameManager.Instance.PauseGame();
-        Time.timeScale = 1f; // El juego sigue corriendo
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        activa = false; // Pausar solo el contador
+        activa = false;
         pausaPantalla.SetActive(true);
         ActualizarUI();
     }
@@ -102,10 +98,9 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance.CurrentState != GameManager.GameState.Paused) return;
 
         GameManager.Instance.ResumeGame();
-        Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        activa = true; // Reanudar el contador cuando el juego se reanude
+        activa = true;
         pausaPantalla.SetActive(false);
         ActualizarUI();
     }
@@ -113,10 +108,9 @@ public class UIManager : MonoBehaviour
     public void OnEndGame()
     {
         GameManager.Instance.EndGame();
-        Time.timeScale = 1f; // El juego sigue corriendo
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        activa = false; // Detener el contador al finalizar el juego
+        activa = false;
         derrotaPantalla.SetActive(true);
         ActualizarUI();
     }
@@ -129,54 +123,48 @@ public class UIManager : MonoBehaviour
     private IEnumerator RestartGameRoutine()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        yield return new WaitForEndOfFrame(); // Esperar un frame para que la escena cargue
-        menuPantalla.SetActive(false); // Ocultar el menú después de la recarga
-        Time.timeScale = 1f; // Asegurar que el juego siga corriendo
+        yield return new WaitForEndOfFrame();
+        menuPantalla.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
-
     public void OnMenu()
     {
-        GameManager.Instance.ReturnToMenu(); // Volver al menú
-        tiempo = 299f; // Reiniciar el contador de tiempo
-        menuPantalla.SetActive(true); // Mostrar el menú principal
+        GameManager.Instance.ReturnToMenu();
+        tiempo = 299f;
+        menuPantalla.SetActive(true);
         tutoPantalla.SetActive(false);
         opcionesPantalla.SetActive(false);
         pausaPantalla.SetActive(false);
         derrotaPantalla.SetActive(false);
-        Time.timeScale = 0f; // Pausar el juego
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        activa = false; // Detener el contador de tiempo
+        activa = false;
         ActualizarUI();
     }
 
     public void ActivarOpciones(bool estado)
     {
         opcionesPantalla.SetActive(estado);
-        Time.timeScale = 1f; // El juego sigue corriendo
         Cursor.lockState = estado ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = estado;
-        activa = !estado; // Pausar el contador si las opciones están activas
+        activa = !estado;
         ActualizarUI();
     }
 
     public void ActivarTutorial(bool estado)
     {
         tutoPantalla.SetActive(estado);
-        Time.timeScale = 1f; // El juego sigue corriendo
         Cursor.lockState = estado ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = estado;
-        activa = !estado; // Pausar el contador si el tutorial está activo
+        activa = !estado;
         ActualizarUI();
     }
 
     private void ActualizarUI()
     {
         bool enPantalla = menuPantalla.activeSelf || pausaPantalla.activeSelf || opcionesPantalla.activeSelf || tutoPantalla.activeSelf || derrotaPantalla.activeSelf;
-
         Cursor.lockState = enPantalla ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = enPantalla;
         activa = !enPantalla;
@@ -204,7 +192,7 @@ public class UIManager : MonoBehaviour
 
     public void LoadOptions()
     {
-        musicSlider.value = PlayerPrefs.GetFloat(AudioManager.Instance.musicSavedValue); // Actualiza el slider de música
+        musicSlider.value = PlayerPrefs.GetFloat(AudioManager.Instance.musicSavedValue); // Actualiza el slider de mï¿½sica
         sfxSlider.value = PlayerPrefs.GetFloat(AudioManager.Instance.sfxSavedValue); // Actualiza el slider de efectos de sonido
         muteCheck.isOn = PlayerPrefs.GetInt(AudioManager.Instance.isMuted) == 1; // Actualiza el toggle de silencio
         AudioManager.Instance.LoadSoundPreferences(); // Carga los valores guardados en AudioManager
