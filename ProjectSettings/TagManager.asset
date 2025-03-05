@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - HeavyObject
   - ObjectCamera
+  - Door
+  - Star
   - Destruible
   - Bullet
   layers:
