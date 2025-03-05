@@ -11,12 +11,10 @@ public class AudioManager : MonoBehaviour
     [SerializeField] AudioMixer bgmMixer, sfxMixer;
     [SerializeField] SampleAccurateLoop sampleLoop;
 
-    public bool isMuteBgm;
-    public bool isMuteSfx;
+    public bool isMute;
     public string musicSavedValue = "musicValue";
     public string sfxSavedValue = "sfxValue";
-    public string musicIsMuted = "musicMuted";
-    public string sfxIsMuted = "sfxMuted";
+    public string isMuted = "isMuted";
 
     private BgmMetadata bgmMetadata;
 
@@ -30,8 +28,7 @@ public class AudioManager : MonoBehaviour
             musicAudio = transform.GetChild(0).GetComponent<AudioSource>();
             sampleLoop = GetComponentInChildren<SampleAccurateLoop>();
             sfxAudio = transform.GetChild(1).GetComponent<AudioSource>();
-            isMuteBgm = false;
-            isMuteSfx = false;
+            isMute = false;
         }
         else
         {
@@ -155,42 +152,29 @@ public class AudioManager : MonoBehaviour
         sfxMixer.SetFloat("Volume_Master",volume);
     }
 
-    public void ToggleMuteMusic(float sliderValue)
+    public void ToggleMute(float sliderMusic, float sliderSfx)
     {
 
-        if (!isMuteBgm)
+        if (!isMute)
         {
             SetMusicVolume(0f);
-            PlayerPrefs.SetFloat(musicSavedValue, sliderValue);
+            SetSfxVolume(0f);
+            PlayerPrefs.SetFloat(musicSavedValue, sliderMusic);
+            PlayerPrefs.SetFloat(sfxSavedValue, sliderSfx);
         }
         else
         {
             SetMusicVolume(PlayerPrefs.GetFloat(musicSavedValue));
-        }
-        isMuteBgm = !isMuteBgm;
-    }
-
-    public void ToggleMuteSfx(float sliderValue)
-    {
-
-        if (!isMuteSfx)
-        {
-            SetSfxVolume(0f);
-            PlayerPrefs.SetFloat(sfxSavedValue, sliderValue);
-        }
-        else
-        {
             SetMusicVolume(PlayerPrefs.GetFloat(sfxSavedValue));
         }
-        isMuteSfx = !isMuteSfx;
+        isMute = !isMute;
     }
 
-    public void SaveSoundPreferences(float levelMusic, float levelSFX, bool muteMusic, bool muteSfx)
+    public void SaveSoundPreferences(float levelMusic, float levelSFX, bool mute)
     {
         PlayerPrefs.SetFloat(musicSavedValue, levelMusic);
         PlayerPrefs.SetFloat(sfxSavedValue, levelSFX);
-        PlayerPrefs.SetInt(musicIsMuted, muteMusic ?  1 : 0);
-        PlayerPrefs.SetInt(sfxIsMuted, muteSfx ?  1 : 0);
+        PlayerPrefs.SetInt(isMuted, mute ?  1 : 0);
     }
 
     public void LoadSoundPreferences()
@@ -198,24 +182,16 @@ public class AudioManager : MonoBehaviour
         if (PlayerPrefs.HasKey(musicSavedValue))
         {
 
-            if (PlayerPrefs.GetInt(musicIsMuted) == 1)
+            if (PlayerPrefs.GetInt(isMuted) == 1)
             {
-                isMuteBgm = true;
+                isMute = true;
                 SetMusicVolume(0f);
-            }
-            else
-            {
-                isMuteBgm = false;
-                SetMusicVolume(PlayerPrefs.GetFloat(musicSavedValue));
-            }
-            if (PlayerPrefs.GetInt(sfxIsMuted) == 1)
-            {
-                isMuteSfx = true;
                 SetSfxVolume(0f);
             }
             else
             {
-                isMuteSfx = false;
+                isMute = false;
+                SetMusicVolume(PlayerPrefs.GetFloat(musicSavedValue));
                 SetSfxVolume(PlayerPrefs.GetFloat(sfxSavedValue));
             }
         }
