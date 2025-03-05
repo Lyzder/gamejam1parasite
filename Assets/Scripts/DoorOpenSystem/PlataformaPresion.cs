@@ -6,7 +6,9 @@ public class BotonPresion : MonoBehaviour
 
     [SerializeField] private GameObject puertaObjeto; 
     private DoorInteraction doorInteraction;
-    private bool yaEjecutado = false;  
+    private bool yaEjecutado = false;
+    public AudioClip boton;
+
     private void Start()
     {
         doorInteraction = puertaObjeto.GetComponent<DoorInteraction>();
@@ -18,7 +20,8 @@ public class BotonPresion : MonoBehaviour
         {
             doorInteraction.AbrirPuerta();
             activado = true;
-            yaEjecutado = true;  
+            yaEjecutado = true;
+            AudioManager.Instance.PlaySFX(boton);
         }
     }
 

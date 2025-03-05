@@ -67,7 +67,7 @@ public class HeavyObjectMovement : MonoBehaviour
         CheckFallen();
         Move();
         if (!isGrounded)
-            rb.AddForce(Vector3.down * 20f, ForceMode.Acceleration);
+            rb.AddForce(Vector3.down * 10f, ForceMode.Acceleration);
         cameraController.SetLookInput(lookInput);
         lookInput = Vector2.zero;
 

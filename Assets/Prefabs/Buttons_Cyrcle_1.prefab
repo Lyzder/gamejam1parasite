@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puertaObjeto: {fileID: 0}
+  boton: {fileID: 8300000, guid: 1f6b8c794736b894c9759c44913e0f1e, type: 3}
 --- !u!1001 &6833688037757118598
 PrefabInstance:
   m_ObjectHideFlags: 0
