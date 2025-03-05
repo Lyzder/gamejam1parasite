@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - HeavyObject
   - ObjectCamera
+  - Destruible
   layers:
   - Default
   - TransparentFX

@@ -152,14 +152,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 10
   distanceDefault: 5
+  distanceFromPlayer: 3
   aimDistanceFromPlayer: 1
   alturaOffset: 1
-  shoulderOffset: -0.5
+  aimOffset: -0.5
   verticalClamp: {x: -30, y: 70}
   aimDistance: 2
   aimSideOffset: 0.5
   transitionSpeed: 10
-  distanceFromPlayer: 3
 --- !u!1 &1787502789126334106
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 4066484549792115597}
   m_Layer: 7
   m_Name: Objeto pesado
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
