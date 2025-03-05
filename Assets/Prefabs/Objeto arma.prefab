@@ -540,12 +540,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGrounded: 0
+  jump: {fileID: 8300000, guid: c17596402b1a4064b9afa44b3c88a975, type: 3}
   rotationOffset: {x: -0.49987787, y: 0.5001221, z: -0.49987787, w: -0.5001221}
   speed: 20
   jumpForce: 5
   airControl: 0.5
   bullet: {fileID: 7813100445764149715, guid: beb2e1c5a73862144a7cb50d10e9518e, type: 3}
-  recarga: 2
+  recarga: 1
   shootSfx: {fileID: 8300000, guid: b5bc721df6d17d441b127f70025e3e6a, type: 3}
 --- !u!136 &2073685045621216114
 CapsuleCollider:

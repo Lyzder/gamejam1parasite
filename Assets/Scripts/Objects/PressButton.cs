@@ -4,6 +4,8 @@ public class PressButton : MonoBehaviour
 {
     public bool isPressed;
     GameObject button;
+    public AudioClip pressed;
+
     private void Update()
     {
         if (isPressed)
@@ -18,6 +20,7 @@ public class PressButton : MonoBehaviour
             Debug.Log("colisiono con " + collision.gameObject.name);
             isPressed = true;
             button = collision.gameObject;
+            AudioManager.Instance.PlaySFX(pressed);
         }
     }
 
