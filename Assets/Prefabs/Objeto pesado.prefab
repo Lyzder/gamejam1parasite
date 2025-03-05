@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 4066484549792115597}
   m_Layer: 7
   m_Name: Objeto pesado
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -305,7 +305,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82c9c943772a52b4cb2bed20abb14496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 20
+  speed: 25
+  jumpForce: 10
+  airControl: 0.5
+  isGrounded: 0
+  jump: {fileID: 8300000, guid: c17596402b1a4064b9afa44b3c88a975, type: 3}
+  fall: {fileID: 8300000, guid: 4420123b83f136141b89e3493c8f547d, type: 3}
 --- !u!1 &4202892504316947852
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,7 +40,7 @@ public class BulletTravel : MonoBehaviour
 
         // If the bullet hits a target, destroy it
         if (other.CompareTag("Destruible"))
-            Destroy(other.gameObject);
+            other.gameObject.GetComponent<Barricada>().BurnDown();
 
         // Bullet is always destroyed upon impact
         Destroy(gameObject);

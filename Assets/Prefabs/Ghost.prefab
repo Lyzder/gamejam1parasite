@@ -183,14 +183,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 10
   distanceDefault: 5
+  distanceFromPlayer: 3
   aimDistanceFromPlayer: 1
   alturaOffset: 1
-  shoulderOffset: -0.5
+  aimOffset: -0.5
   verticalClamp: {x: -30, y: 70}
   aimDistance: 2
   aimSideOffset: 0.5
   transitionSpeed: 10
-  distanceFromPlayer: 3
 --- !u!1 &8532367945184956890
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,6 +476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   jumpForce: 3
+  poseerSfx: {fileID: 8300000, guid: 488068a5b0b186942b0ce9793ebdd216, type: 3}
   pivotePoseer: {fileID: 5965706576768350169}
   radioPoseer: 0.4
   capaDeteccion:
