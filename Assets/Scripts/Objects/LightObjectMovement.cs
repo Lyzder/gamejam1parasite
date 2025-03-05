@@ -65,7 +65,7 @@ public class LightObjectMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Mejor detección del suelo con un Raycast
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.5f);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.7f);
 
         Move();
 
