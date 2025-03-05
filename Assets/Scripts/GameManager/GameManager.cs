@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -24,13 +24,7 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        if (CurrentState == GameState.Idle || CurrentState == GameState.GameOver)
-        {
-            CurrentState = GameState.Playing;
-            Debug.Log("Game Started!");
-            // Lógica adicional, como reiniciar variables o cargar la escena
-           
-        }
+        CurrentState = GameState.Playing;
     }
 
     public void PauseGame()
@@ -38,8 +32,6 @@ public class GameManager : MonoBehaviour
         if (CurrentState == GameState.Playing)
         {
             CurrentState = GameState.Paused;
-            Time.timeScale = 0f;
-            Debug.Log("Game Paused!");
         }
     }
 
@@ -48,25 +40,21 @@ public class GameManager : MonoBehaviour
         if (CurrentState == GameState.Paused)
         {
             CurrentState = GameState.Playing;
-            Time.timeScale = 1f;
-            Debug.Log("Game Resumed!");
         }
     }
 
     public void EndGame()
     {
-        if (CurrentState == GameState.Playing || CurrentState == GameState.Paused)
-        {
-            CurrentState = GameState.GameOver;
-            Time.timeScale = 1f; // Asegurar que el tiempo se restablece
-            Debug.Log("Game Over!");
-            // Aquí puedes agregar lógica para mostrar una pantalla de fin de juego
-        }
+        CurrentState = GameState.GameOver;
     }
-   
-   
 
-  
+    public void ResetGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
 
+    public void ReturnToMenu()
+    {
+        CurrentState = GameState.Idle;
+    }
 }
-
