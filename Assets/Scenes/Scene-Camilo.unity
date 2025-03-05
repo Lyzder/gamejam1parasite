@@ -1435,6 +1435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tiempoTxt: {fileID: 7800093906971943549}
+  tiempo: 299
   menuPantalla: {fileID: 1726623507}
   tutoPantalla: {fileID: 1726623506}
   opcionesPantalla: {fileID: 1726623505}
@@ -10456,6 +10457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashObject: {fileID: 1799319094}
   textEndingObject: {fileID: 1857506546}
+  victoryScreen: {fileID: 0}
 --- !u!65 &830465504
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -29223,12 +29225,12 @@ SceneRoots:
   - {fileID: 1268354881}
   - {fileID: 1986070305}
   - {fileID: 1124647711}
+  - {fileID: 744636858}
   - {fileID: 7161600745221227167}
   - {fileID: 1726623499}
   - {fileID: 260023820}
   - {fileID: 598957797}
   - {fileID: 1413793665}
   - {fileID: 1232685548}
-  - {fileID: 744636858}
   - {fileID: 2072989336}
   - {fileID: 146057238}

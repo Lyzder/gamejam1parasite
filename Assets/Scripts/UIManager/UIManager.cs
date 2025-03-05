@@ -17,13 +17,13 @@ public class UIManager : MonoBehaviour
     [SerializeField] Slider musicSlider, sfxSlider;
     [SerializeField] Toggle muteCheck;
 
+
     private void Start()
     {
         activa = false; // El contador no inicia hasta que se presione Play
         Time.timeScale = 1f; // Mantener Time.timeScale en 1 para RawImages
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        SaveOptions();
         ActualizarUI();
         AudioManager.Instance.PlaySceneBgm();
     }
