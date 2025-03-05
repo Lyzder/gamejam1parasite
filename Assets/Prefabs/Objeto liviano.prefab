@@ -323,7 +323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 25
-  jumpForce: 10
+  jumpForce: 15
   airControl: 0.5
   isGrounded: 0
 --- !u!1 &4252633776860861170

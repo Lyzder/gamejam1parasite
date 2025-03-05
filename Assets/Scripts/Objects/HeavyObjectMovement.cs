@@ -16,6 +16,10 @@ public class HeavyObjectMovement : MonoBehaviour
 
     [Header("Configuración de Movimiento")]
     public float speed = 2f;
+    public float jumpForce = 10f; // Fuerza del salto
+    public float airControl = 0.5f; // Control en el aire
+
+    public bool isGrounded;
 
     private void Awake()
     {
@@ -32,6 +36,7 @@ public class HeavyObjectMovement : MonoBehaviour
         inputs = new InputSystem_Actions();
         inputs.Player.Enable();
 
+        inputs.Player.Jump.performed += OnJump;
         inputs.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
     }
 
@@ -39,6 +44,7 @@ public class HeavyObjectMovement : MonoBehaviour
     {
         // Deshabilitar entradas y desuscribir eventos correctamente
         inputs.Player.Disable();
+        inputs.Player.Jump.performed -= OnJump;
         inputs.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
     }
 
@@ -56,6 +62,7 @@ public class HeavyObjectMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.7f);
         moveInput = inputs.Player.Move.ReadValue<Vector2>().normalized;
         Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
 
@@ -75,6 +82,16 @@ public class HeavyObjectMovement : MonoBehaviour
         rb.AddForce(moveDirection * speed);
         cameraController.SetLookInput(lookInput);
         lookInput = Vector2.zero;
+
+    }
+    private void OnJump(InputAction.CallbackContext ctx)
+    {
+        if (isGrounded)
+        {
+            // Reiniciar la velocidad vertical para un salto consistente
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
 }

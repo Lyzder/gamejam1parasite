@@ -14,7 +14,7 @@ public class BotonPresion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !activado && !yaEjecutado)
+        if (other.CompareTag("HeavyObject") && !activado && !yaEjecutado)
         {
             doorInteraction.AbrirPuerta();
             activado = true;
@@ -25,7 +25,7 @@ public class BotonPresion : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         if (yaEjecutado) return;
-        if (other.CompareTag("Player") && activado)
+        if (other.CompareTag("HeavyObject") && activado)
         {
             doorInteraction.CerrarPuerta();
             activado = false;
