@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - HeavyObject
   - ObjectCamera
+  - Door
+  - Star
   layers:
   - Default
   - TransparentFX

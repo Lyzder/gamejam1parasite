@@ -18,22 +18,21 @@ public class playerMovement : MonoBehaviour
     private Rigidbody rb;
     public float jumpForce = 3f;
 
-
     [SerializeField] Transform pivotePoseer;
     [SerializeField] float radioPoseer;
     [SerializeField] LayerMask capaDeteccion;
+
+    private bool tieneEstrella = false; // Nueva variable
+
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>(); // Obtiene el Rigidbody del personaje
+        rb = GetComponent<Rigidbody>();
         inputs = new InputSystem_Actions();
         inputs.Player.Enable();
 
         inputs.Player.Look.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
-
-        // Detectar el salto
         inputs.Player.Jump.performed += ctx => Jump();
-
-        inputs.Player.Interact.performed += ctx => Poseer();
+        inputs.Player.Interact.performed += ctx => Interactuar();
 
         cameraController = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraController>();
         if (cameraTransform == null)
@@ -47,7 +46,7 @@ public class playerMovement : MonoBehaviour
         inputs.Player.Disable();
         inputs.Player.Look.performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
         inputs.Player.Jump.performed -= ctx => Jump();
-        inputs.Player.Interact.performed -= ctx => Poseer();
+        inputs.Player.Interact.performed -= ctx => Interactuar();
     }
 
     private void Update()
@@ -73,9 +72,7 @@ public class playerMovement : MonoBehaviour
         cameraForward.Normalize();
         cameraRight.Normalize();
 
-        // Movimiento relativo a la c�mara
         moveDirection = (cameraForward * move.z + cameraRight * move.x).normalized;
-
         transform.Translate(moveDirection * speed * Time.deltaTime, Space.World);
 
         cameraController.SetLookInput(lookInput);
@@ -119,19 +116,43 @@ public class playerMovement : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, 0.1f);
     }
 
-    private void Poseer()
+    private void Interactuar()
     {
         Collider[] objetos = Physics.OverlapSphere(pivotePoseer.position, radioPoseer, capaDeteccion);
-        if(objetos.Length > 0)
+
+        if (objetos.Length > 0)
         {
-            Object_PlayerDetector detector = objetos[0].GetComponent<Object_PlayerDetector>();
-            detector.Poseer(gameObject);
+            foreach (var obj in objetos)
+            {
+                if (obj.CompareTag("Star")) // Si es una estrella, la recoge
+                {
+                    RecogerEstrella(obj.gameObject);
+                    return;
+                }
+               
+                else // Si es otro objeto, sigue funcionando Poseer()
+                {
+                    Object_PlayerDetector detector = obj.GetComponent<Object_PlayerDetector>();
+                    if (detector != null)
+                    {
+                            detector.Poseer(gameObject);
+                            return;
+                    }
+                }
+            }
         }
     }
-    private void OnDrawGizmos()//Para dibujar guizmos solo vistas en editor 
+
+    private void RecogerEstrella(GameObject estrella)
+    {
+        tieneEstrella = true;
+        Destroy(estrella); // Destruye la estrella al recogerla
+        Debug.Log("¡Has recogido la estrella!");
+    }
+
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(pivotePoseer.position, radioPoseer);
     }
-
 }

@@ -1,12 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class BotonPresion : MonoBehaviour
+public class CogerEstrella : MonoBehaviour
 {
     private bool activado = false;
 
-    [SerializeField] private GameObject puertaObjeto; 
+    [SerializeField] private GameObject puertaObjeto;
     private DoorInteraction doorInteraction;
-    private bool yaEjecutado = false;  
+    private bool yaEjecutado = false;
     private void Start()
     {
         doorInteraction = puertaObjeto.GetComponent<DoorInteraction>();
@@ -14,11 +16,11 @@ public class BotonPresion : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("HeavyObject") &&  !activado && !yaEjecutado)
+        if (other.CompareTag("Player") && !activado && !yaEjecutado)
         {
             doorInteraction.AbrirPuerta();
             activado = true;
-            yaEjecutado = true;  
+            yaEjecutado = true;
         }
     }
 
