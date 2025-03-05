@@ -37,7 +37,7 @@ public class Object_PlayerDetector : MonoBehaviour
                 movementScriptLiviano = GetComponent<LightObjectMovement>();
                 break;
         }
-        targetParent = transform.GetChild(1);
+        targetParent = transform.GetChild(2);
     }
 
     private void Update()

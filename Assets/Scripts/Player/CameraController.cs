@@ -6,9 +6,10 @@ public class CameraController : MonoBehaviour
     [Header("Settings")]
     public float mouseSensitivity;
     [SerializeField] float distanceDefault = 5f;
+    [SerializeField] float distanceFromPlayer = 3f; // Distance between camera and player
     public float aimDistanceFromPlayer = 1f;
     public float alturaOffset;
-    public float shoulderOffset = -0.5f;
+    public float aimOffset = -0.5f;
     public Vector2 verticalClamp = new Vector2(-30f, 70f); // Clamp vertical rotation
 
     [Header("Aiming Settings")]
@@ -17,7 +18,6 @@ public class CameraController : MonoBehaviour
     public float transitionSpeed = 10f; // Smoothing factor
 
     private Transform playerPivot; // The pivot inside the player object
-    [SerializeField] float distanceFromPlayer = 3f; // Distance between camera and player
     private Vector2 lookInput;
     private float xRotation = 0f;
     private float yRotation = 0f;
@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour
 
         // Store default positions
         defaultPivotPosition = playerPivot.localPosition;
-        aimingPivotPosition = defaultPivotPosition + new Vector3(shoulderOffset, 0f, 0f);
+        aimingPivotPosition = defaultPivotPosition - new Vector3(0f, 0f, aimOffset);
         currentDistance = distanceFromPlayer;
     }
 
