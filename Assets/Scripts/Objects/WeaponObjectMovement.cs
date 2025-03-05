@@ -18,6 +18,7 @@ public class WeaponObjectMovement : MonoBehaviour
     private bool aiming;
 
     public bool isGrounded;
+    public AudioClip jump;
     public Quaternion rotationOffset;
 
     [Header("Configuración de Movimiento")]
@@ -164,6 +165,7 @@ public class WeaponObjectMovement : MonoBehaviour
             // Reiniciar la velocidad vertical para un salto consistente
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            AudioManager.Instance.PlaySFX(jump);
         }
     }
 

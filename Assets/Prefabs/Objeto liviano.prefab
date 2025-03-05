@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 3932883465543579941}
   m_Layer: 7
   m_Name: Objeto liviano
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -326,6 +326,8 @@ MonoBehaviour:
   jumpForce: 15
   airControl: 0.5
   isGrounded: 0
+  jump: {fileID: 8300000, guid: c17596402b1a4064b9afa44b3c88a975, type: 3}
+  fall: {fileID: 8300000, guid: e45ca79e4458fb44289571e4baf313e7, type: 3}
 --- !u!1 &4252633776860861170
 GameObject:
   m_ObjectHideFlags: 0

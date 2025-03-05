@@ -11,6 +11,7 @@ TagManager:
   - Door
   - Star
   - Destruible
+  - Bullet
   layers:
   - Default
   - TransparentFX

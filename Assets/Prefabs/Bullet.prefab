@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3257503516947120048}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,7 +101,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpeed: 10
-  aliveTime: 5
+  aliveTime: 3
   impactEffect: {fileID: 510698420196234222, guid: 042cd349fc6edbf49a9b69d0006004ce,
     type: 3}
   rotateSpeed: 0

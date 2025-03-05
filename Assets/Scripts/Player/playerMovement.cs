@@ -17,6 +17,7 @@ public class playerMovement : MonoBehaviour
 
     private Rigidbody rb;
     public float jumpForce = 3f;
+    public AudioClip poseerSfx;
 
     [SerializeField] Transform pivotePoseer;
     [SerializeField] float radioPoseer;
@@ -135,8 +136,9 @@ public class playerMovement : MonoBehaviour
                     Object_PlayerDetector detector = obj.GetComponent<Object_PlayerDetector>();
                     if (detector != null)
                     {
-                            detector.Poseer(gameObject);
-                            return;
+						AudioManager.Instance.PlaySFX(poseerSfx);
+						detector.Poseer(gameObject);
+						return;
                     }
                 }
             }

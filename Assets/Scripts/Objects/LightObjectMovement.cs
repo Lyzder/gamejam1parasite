@@ -21,6 +21,8 @@ public class LightObjectMovement : MonoBehaviour
     public float airControl = 0.5f; // Control en el aire
 
     public bool isGrounded;
+    public AudioClip jump;
+    public AudioClip fall;
 
     private void Awake()
     {
@@ -65,7 +67,7 @@ public class LightObjectMovement : MonoBehaviour
     private void FixedUpdate()
     {
         // Mejor detección del suelo con un Raycast
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.7f);
+        CheckFallen();
 
         Move();
 
@@ -80,10 +82,23 @@ public class LightObjectMovement : MonoBehaviour
             // Reiniciar la velocidad vertical para un salto consistente
             rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            AudioManager.Instance.PlaySFX(jump);
         }
     }
 
-    private void Move()
+    private void CheckFallen()
+    {
+        if (!isGrounded)
+        {
+            isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.7f);
+            if (isGrounded)
+                AudioManager.Instance.PlaySFX(fall);
+        }
+        else
+            isGrounded = Physics.Raycast(transform.position, Vector3.down, 0.7f);
+    }
+
+private void Move()
     {
         moveInput = inputs.Player.Move.ReadValue<Vector2>().normalized;
         Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
